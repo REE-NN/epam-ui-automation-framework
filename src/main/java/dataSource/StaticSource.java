@@ -11,8 +11,8 @@ public class StaticSource {
     public static final String PASS = "password";
     public static final String GECKO = "webdriver.gecko.driver";
 
-    public static final String LOAD_DRIVER_MESSAGE = "+++Driver have been loaded!+++";
-    public static final String UNLOAD_DRIVER_MESSAGE = "+++Driver have been unloaded+++";
+    public static final String LOAD_DRIVER_MESSAGE = "+++Driver initialized!+++";
+    public static final String UNLOAD_DRIVER_MESSAGE = "+++Driver closed+++";
 
     public static final String TEST = "test";
     public static final String EMAIL_TEST = "ree.post@yandex.ru";

@@ -1,4 +1,4 @@
-package dataSource;
+package model;
 
 import static dataSource.StaticSource.EMAIL_TEST;
 import static dataSource.StaticSource.TEST;

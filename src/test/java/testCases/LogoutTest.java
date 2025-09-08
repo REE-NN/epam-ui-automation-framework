@@ -1,6 +1,6 @@
 package testCases;
 
-import dataSource.DriverManager;
+import driver.DriverManager;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
@@ -15,7 +15,7 @@ public class LogoutTest {
             dependsOnGroups = "check sent letter",
             alwaysRun = true)
     public void logoutCheck() {
-        userMenu.openRightMenuItem(userMenu.getLogout());
+        userMenu.openMailFromMenu();
         assertTrue(loginPage.getPasswdField().isDisplayed());
     }
 

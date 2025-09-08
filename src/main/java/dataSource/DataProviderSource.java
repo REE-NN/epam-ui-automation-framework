@@ -1,16 +1,18 @@
 package dataSource;
 
+import model.Letter;
 import org.testng.annotations.DataProvider;
+import utils.CSVUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class DataProviderSource {
     @DataProvider(name = "letter from CSV")
-    public static Object[][] LetterFromCSV() {
-        List<Letter> list = CSVReader.loadData();
-        int n = CSVReader.list.size(); //количество строк в массиве
-        int m = 3;                     //количество колонок - все аттрибуты письма
+    public static Object[][] letterFromCSV() {
+        List<Letter> list = CSVUtils.loadData();
+        int n = list.size(); //количество строк в массиве
+        int m = 3;           //количество колонок - все аттрибуты письма
         Object[][] objects = new Object[n][m];
         for (int i = 0; i < n; i++) {
             Letter letter = list.get(i);
@@ -23,7 +25,7 @@ public class DataProviderSource {
     }
 
     @DataProvider(name = "to subject body")
-    public static Object[][] To_Subject_Body() {
+    public static Object[][] toSubjectBody() {
         return new Object[][]{
                 {"ree.post@yandex.ru", "sport", "sport, sport, sport."},
                 {"test@test.com", "test", "test"},
@@ -31,13 +33,13 @@ public class DataProviderSource {
     }
 
     @DataProvider(name = "letter to send")
-    public static Object[][] SendLetter() {
+    public static Object[][] sendLetter() {
         return new Object[][]{
                 {"ree.post@yandex.ru", "send", "this email must be sent"}};
     }
 
     @DataProvider(name = "letter to delete")
-    public static Object[][] LetterToDelete() {
+    public static Object[][] letterToDelete() {
         return new Object[][]{
                 {"delete@yandex.ru", "delete", "this massage must be deleted"}};
     }

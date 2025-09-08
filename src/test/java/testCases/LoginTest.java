@@ -1,17 +1,17 @@
 package testCases;
 
-import dataSource.ConfProperties;
-import dataSource.DriverManager;
+import config.ConfProperties;
+import driver.DriverManager;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.MailPage;
-import pages.MailPageWrightLetter;
+import pages.MailPageWriteLetter;
 import pages.UserMenu;
 
 import java.time.Duration;
 
-import static dataSource.DriverManager.driver;
+import static driver.DriverManager.driver;
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_10;
 import static org.testng.Assert.assertEquals;
 
@@ -19,7 +19,7 @@ public class LoginTest {
     public static LoginPage loginPage;
     public static UserMenu userMenu;
     public static MailPage mailPage;
-    public static MailPageWrightLetter wrightLetter;
+    public static MailPageWriteLetter wrightLetter;
 
     @BeforeSuite(description = "load browserDriver")
     static void startMethod() {
@@ -28,7 +28,7 @@ public class LoginTest {
         loginPage = new LoginPage(driver);
         userMenu = new UserMenu(driver);
         mailPage = new MailPage(driver);
-        wrightLetter = new MailPageWrightLetter(driver);
+        wrightLetter = new MailPageWriteLetter(driver);
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_10)); // Implicit Wait, неявное ожидание
@@ -43,9 +43,8 @@ public class LoginTest {
         assertEquals(user, "ivanov-autotest.post", "test login fail");
     }
 
-    @Test(groups = {"enter menu"},
-            dependsOnGroups = "logIn")
+    @Test(groups = {"enter menu"}, dependsOnGroups = "logIn")
     public void openMailPage() {
-        userMenu.openRightMenuItem(userMenu.getMailPage());
+        userMenu.openMailFromMenu();
     }
 }

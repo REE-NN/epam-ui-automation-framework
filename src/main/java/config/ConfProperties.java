@@ -1,4 +1,4 @@
-package dataSource;
+package config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ConfProperties {
                 try {
                     fileInputStream.close();
                 } catch (IOException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
         }
     }

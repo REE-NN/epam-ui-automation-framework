@@ -11,9 +11,9 @@ import java.time.Duration;
 
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_90;
 
-public class MailPageWrightLetter extends MailPage {
+public class MailPageWriteLetter extends MailPage {
 
-    public MailPageWrightLetter(WebDriver driver) {
+    public MailPageWriteLetter(WebDriver driver) {
         super(driver);
     }
 
@@ -35,7 +35,7 @@ public class MailPageWrightLetter extends MailPage {
     @FindBy(css = ".composeHeader-Buttons:nth-child(2) .ControlButton_button_close > .ControlButton-Button")
     private WebElement closeLetterBtn;
 
-    public MailPageWrightLetter wrightLetter(String inAddress, String inSubject, String inBody) {
+    public MailPageWriteLetter wrightLetter(String inAddress, String inSubject, String inBody) {
         actions.sendKeys(addressLetter, inAddress)
                 .click(subjectLetter)
                 .sendKeys(subjectLetter, inSubject)
