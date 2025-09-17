@@ -26,11 +26,7 @@ public class LoginTest {
 
     @BeforeSuite(description = "load browserDriver")
     public void startMethod() {
-        WebDriverManager.firefoxdriver().setup();
         driver = DriverManager.loadDriver();
-        if (driver == null) {
-            driver = new org.openqa.selenium.firefox.FirefoxDriver();
-        }
 
         loginPage = new LoginPage(driver);
         userMenu = new UserMenu(driver);
@@ -38,7 +34,8 @@ public class LoginTest {
         wrightLetter = new MailPageWriteLetter(driver);
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_10)); // Implicit Wait, неявное ожидание
+        driver.manage().timeouts()
+                .implicitlyWait(Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_10)); // Implicit Wait, неявное ожидание
     }
 
     @Test(groups = "smoke")
