@@ -7,12 +7,17 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.Optional;
+
 public class DriverFactory {
 
     public static WebDriver createDriver() {
-        String browser = ConfProperties.getProperty("browser").toLowerCase();
+        //недавно узнала про Optional, понравилось, пытаюсь применять
+        String browser = Optional.ofNullable(ConfProperties.getProperty("browser"))
+                .filter(b -> !b.isBlank())
+                .orElse("firefox");
 
-        switch (browser) {
+        switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 return new ChromeDriver();
