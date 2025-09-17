@@ -3,3 +3,7 @@ Scheme.txt
 
 # Project exclude paths
 /target/
+
+# secrets
+/src/test/resources/secrets.properties
+!/src/test/resources/secrets.template.properties
