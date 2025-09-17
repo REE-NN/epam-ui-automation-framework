@@ -9,7 +9,6 @@ public class StaticSource {
 
     public static final String LOGIN = "login";
     public static final String PASS = "password";
-//    public static final String GECKO = "webdriver.gecko.driver";
 
     public static final String LOAD_DRIVER_MESSAGE = "+++Driver initialized: {}+++";
     public static final String UNLOAD_DRIVER_MESSAGE = "+++Driver quit+++";
