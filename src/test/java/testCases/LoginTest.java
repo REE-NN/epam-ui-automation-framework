@@ -2,6 +2,8 @@ package testCases;
 
 import config.ConfProperties;
 import driver.DriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import pages.LoginPage;
@@ -13,7 +15,8 @@ import java.time.Duration;
 
 import static driver.DriverManager.driver;
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_10;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
+import static org.testng.AssertJUnit.assertNotNull;
 
 public class LoginTest {
     public static LoginPage loginPage;
@@ -22,9 +25,13 @@ public class LoginTest {
     public static MailPageWriteLetter wrightLetter;
 
     @BeforeSuite(description = "load browserDriver")
-    static void startMethod() {
-        System.setProperty("webdriver.gecko.driver", ConfProperties.getProperty("geckodriver"));
+    public void startMethod() {
+        WebDriverManager.firefoxdriver().setup();
         driver = DriverManager.loadDriver();
+        if (driver == null) {
+            driver = new org.openqa.selenium.firefox.FirefoxDriver();
+        }
+
         loginPage = new LoginPage(driver);
         userMenu = new UserMenu(driver);
         mailPage = new MailPage(driver);
@@ -32,7 +39,21 @@ public class LoginTest {
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_10)); // Implicit Wait, неявное ожидание
-        driver.get(ConfProperties.getProperty("startPage"));
+    }
+
+    @Test(groups = "smoke")
+    public void canOpenStartPage() {
+        String url = ConfProperties.getProperty("startPage");
+        driver.get(url);
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(d -> {
+                    String t = d.getTitle();
+                    return t != null && !t.isBlank();
+                });
+
+        String title = driver.getTitle();
+        assertFalse(title.isBlank(), "Title is blank");
     }
 
     @Test(groups = "logIn")

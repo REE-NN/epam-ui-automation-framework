@@ -1,22 +1,22 @@
 package driver;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import config.ConfProperties;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import static dataSource.StaticSource.*;
+import static dataSource.StaticSource.LOAD_DRIVER_MESSAGE;
+import static dataSource.StaticSource.UNLOAD_DRIVER_MESSAGE;
 
 public class DriverManager {
     private static final Logger log = LogManager.getLogger(DriverManager.class);
-    public static WebDriver driver;
+    public static WebDriver driver  = DriverFactory.createDriver();
 
     public static WebDriver loadDriver() {
         if (driver == null) {
-            System.setProperty(GECKO, ConfProperties.getProperty("geckodriver"));
+            WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver();
             log.info(LOAD_DRIVER_MESSAGE);
         }

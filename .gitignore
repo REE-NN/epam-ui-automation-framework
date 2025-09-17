@@ -2,4 +2,8 @@ Scheme.txt
 /src/test/resources/
 
 # Project exclude paths
-/target/
+src/test/resources/secrets.properties
+.env
+*.log
+allure-results/
+target/
