@@ -1,5 +1,4 @@
 Scheme.txt
-/src/test/resources/
 
 # Project exclude paths
 src/test/resources/secrets.properties
