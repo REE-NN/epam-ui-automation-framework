@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extra logging related to initialization of Log4j.
+ Set to debug or trace if log4j initialization is failing. -->
+
+<!-- TODO(security): добавить маскирование JSON-пароля.
+     Как внедрять позже: обернуть текущий PatternLayout ещё одним %replace,
+     чтобы скрывать "password":"...":
+     %replace{(ТЕКУЩИЙ_БЛОК_ИЗ_%replace_НАД_%msg)}
+              {(?i)\"password\"\s*:\s*\"([^\"]+)\"}
+              {\"password\":\"****\"}
+-->
+
+
+<Configuration status="error">
+    <Appenders>
+
+        <!-- Console appender -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %replace{%replace{%replace{%replace{%msg}{(?i)(password\s*[:=]\s*)([^,\s]+)}{$1****}}{(?i)\bAuthorization\s*[:=]\s*Bearer\s+[A-Za-z0-9\-\._~\+\/]+=*}{Authorization: Bearer ****}}{(?i)\b(token\s*[:=]\s*)([^,\s]+)}{$1****}}{(?i)\b(secret\s*[:=]\s*)([^,\s]+)}{$1****}%n"
+                    charset="UTF-8"/>
+        </Console>
+
+        <!-- File appender для теста -->
+        <RollingFile name="testFile"
+                     fileName="target/logs/test-${ctx:runId}.log"
+                     filePattern="target/logs/test-${ctx:runId}-%d{HHmmss}-%i.log.gz">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %replace{%replace{%replace{%replace{%msg}{(?i)(password\s*[:=]\s*)([^,\s]+)}{$1****}}{(?i)\bAuthorization\s*[:=]\s*Bearer\s+[A-Za-z0-9\-\._~\+\/]+=*}{Authorization: Bearer ****}}{(?i)\b(token\s*[:=]\s*)([^,\s]+)}{$1****}}{(?i)\b(secret\s*[:=]\s*)([^,\s]+)}{$1****}}%n"
+                    charset="UTF-8"/>
+            <Policies><SizeBasedTriggeringPolicy size="5 MB"/></Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="error" additivity="false">
+            <AppenderRef ref="console" level="error"/>
+            <AppenderRef ref="testFile" level="error"/>
+        </Root>
+    </Loggers>
+</Configuration>
