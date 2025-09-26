@@ -1,8 +1,18 @@
-Scheme.txt
+# IDE
+.idea/
+*.iml
 
-# Project exclude paths
-src/test/resources/secrets.properties
-.env
-*.log
-allure-results/
+# Build artifacts
 target/
+allure-results/
+
+# Logs
+*.log
+
+# Secrets (никогда в репо)
+src/**/secrets.properties
+.env
+
+# Drivers и временные тестовые данные
+src/lib/geckodriver.exe
+src/test/resources/*.csv
