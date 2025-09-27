@@ -2,6 +2,7 @@
 .idea/
 *.iml
 
+
 # Build artifacts
 target/
 allure-results/
