@@ -15,12 +15,8 @@ public class DriverFactory {
         // TODO: поддержка Chrome/Edge — пока тестируется только Firefox
         switch (browser) {
             case CHROME:
-//                WebDriverManager.chromedriver().setup();
-//                return new ChromeDriver();
                 throw new UnsupportedOperationException("Chrome пока не поддерживается в этом проекте");
             case EDGE:
-//                WebDriverManager.edgedriver().setup();
-//                return new EdgeDriver();
                 throw new UnsupportedOperationException("Edge пока не поддерживается в этом проекте");
             case FIREFOX:
             default:
