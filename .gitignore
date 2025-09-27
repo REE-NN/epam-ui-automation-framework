@@ -1,8 +1,10 @@
 Scheme.txt
 
 # Project exclude paths
+
 src/test/resources/secrets.properties
 .env
 *.log
 allure-results/
 target/
+
