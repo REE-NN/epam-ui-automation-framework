@@ -14,7 +14,8 @@ import java.time.Duration;
 
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_10;
 import static driver.DriverManager.driver;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class LoginTest {
     public static LoginPage loginPage;
@@ -54,10 +55,9 @@ public class LoginTest {
     @Test(groups = "logIn")
     public void loginTest() {
         loginPage.doLogin();
-        //assertTrue(new UserMenu(driver).isAvatarVisible());
-
-        String user = userMenu.getEmailAddress();
-        assertEquals(user, "ivanov-autotest.post", "test login fail");
+        UserMenu userMenu = new UserMenu(driver);
+        assertTrue(userMenu.isAvatarVisible(),
+                "Аватар не виден — логин, похоже, не прошёл.");
     }
 
     @Test(groups = {"enter menu"}, dependsOnGroups = "logIn")

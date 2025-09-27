@@ -61,6 +61,7 @@ public class LoginPage extends BasePage {
     public MailPage doLogin() {
         inputLogin();
         inputPasswd();
+        //return new UserMenu(driver);
         return new MailPage(driver);
     }
 }

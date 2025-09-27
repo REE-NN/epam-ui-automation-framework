@@ -1,26 +1,35 @@
 package pages;
 
-import org.apache.logging.log4j.core.util.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.time.Duration;
 
-import static dataSource.StaticSource.*;
+import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_30;
 
 public class UserMenu extends BasePage {
     private static final Logger log = LogManager.getLogger(UserMenu.class);
-    private final Actions actions;
+
+    private final WebDriverWait wait;
 
     public UserMenu(WebDriver driver) {
         super(driver);
-        this.actions = new Actions(driver);
+        PageFactory.initElements(driver, this);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+    }
+
+    /**
+     * Аватар виден на странице профиля
+     */
+    public boolean isAvatarVisible() {
+        return wait.until(ExpectedConditions.visibilityOf(leftAvatar)).isDisplayed();
     }
 
 //    @FindBy(css = ".user-pic__image")
@@ -83,9 +92,6 @@ public class UserMenu extends BasePage {
                 .getText();
     }
 
-//    @FindBy(css = ".UserID-Avatar")
-//    private WebElement userAvatar;
-
     public void openUserMenu() {
         new Actions(driver)
                 .moveToElement(leftAvatar)
@@ -131,20 +137,11 @@ public class UserMenu extends BasePage {
                 File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                 File dest = new File("target/failure_openMailFromMenu.png");
                 //FileUtils.copyFile(screenshot, dest);
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
             throw e;
         }
 
         return new MailPage(driver);
     }
-
-    public MailPage openLeftMenuItem(WebElement webElement) {
-        actions.click(webElement).perform();
-        return new MailPage(driver);
-    }
-
-//    public boolean isAvatarVisible(){
-//        return wait.until(ExpectedConditions.visibilityOf(leftAvatar)).isDisplayed();
-//    }
 }
