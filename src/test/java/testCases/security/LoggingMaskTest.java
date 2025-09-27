@@ -2,7 +2,6 @@ package testCases.security;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -17,20 +16,23 @@ import java.nio.file.Path;
 // assertTrue(line.contains("\"password\":\"****\""));
 
 public class LoggingMaskTest {
-    static {
-        try {
-            Files.createDirectories(Path.of("target/logs"));
-        } catch (Exception ignore) {
-        }
-        String runId = java.time.LocalDateTime.now()
-                .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmm ss-SSS"));
-        org.apache.logging.log4j.ThreadContext.put("runId", runId);
-    }
-
     private static final Logger log = LogManager.getLogger(LoggingMaskTest.class);
 
     private static Path logFile() {
-        return Path.of("target/logs/test-" + ThreadContext.get("runId") + ".log");
+        String runId = System.getProperty("runId"); // приходит из Maven Surefire
+        java.nio.file.Path logsDir = java.nio.file.Path.of("target/logs");
+
+        if (runId != null && !runId.isBlank()) {
+            return logsDir.resolve("test-" + runId + ".log");
+        }
+        // фолбэк: берём самый свежий test-*.log (если runId не задан в IDE)
+        try (var s = java.nio.file.Files.list(logsDir)) {
+            return s.filter(p -> p.getFileName().toString().startsWith("test-") && p.toString().endsWith(".log"))
+                    .max(java.util.Comparator.comparingLong(p -> p.toFile().lastModified()))
+                    .orElse(logsDir.resolve("test.log"));
+        } catch (Exception e) {
+            return logsDir.resolve("test.log");
+        }
     }
 
     @Test(groups = "security")
