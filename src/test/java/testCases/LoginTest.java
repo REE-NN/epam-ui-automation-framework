@@ -2,7 +2,6 @@ package testCases;
 
 import config.ConfProperties;
 import driver.DriverManager;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -13,10 +12,10 @@ import pages.UserMenu;
 
 import java.time.Duration;
 
-import static driver.DriverManager.driver;
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_10;
-import static org.testng.Assert.*;
-import static org.testng.AssertJUnit.assertNotNull;
+import static driver.DriverManager.driver;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 public class LoginTest {
     public static LoginPage loginPage;
