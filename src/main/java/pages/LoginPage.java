@@ -32,7 +32,6 @@ public class LoginPage extends BasePage {
     @FindBy(css = "#passp-field-passwd")
     private WebElement passwdField;
 
-
     //не удалять, это относится к logout
 //    public WebElement getPasswdField() {
 //        Wait<WebDriver> waiter = new FluentWait<>(driver);
@@ -61,7 +60,6 @@ public class LoginPage extends BasePage {
     public MailPage doLogin() {
         inputLogin();
         inputPasswd();
-        //return new UserMenu(driver);
         return new MailPage(driver);
     }
 }

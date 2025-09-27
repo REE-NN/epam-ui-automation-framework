@@ -61,7 +61,8 @@ public class LoginTest {
     }
 
     @Test(groups = {"enter menu"}, dependsOnGroups = "logIn")
-    public void openMailPage() {
-        userMenu.openMailFromMenu();
+    public void openUserMenuTest() {
+        userMenu.openUserMenu();
+        assertTrue(userMenu.isUserMenuOpen(), "Меню пользователя не открылось.");
     }
 }

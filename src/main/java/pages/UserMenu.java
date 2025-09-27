@@ -11,18 +11,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 
 import static dataSource.StaticSource.WAIT_TIMEOUT_SECONDS_30;
 
 public class UserMenu extends BasePage {
     private static final Logger log = LogManager.getLogger(UserMenu.class);
+    private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-    private final WebDriverWait wait;
+    // любой валидный контейнер открытого меню
+    private static final By MENU_CONTAINER =
+            By.cssSelector("[data-testid='menu-popup'], .menu-popup, [role='menu']");
+
+    @FindBy(css = "button.UserID-Account")
+    private WebElement accountButton;
 
     public UserMenu(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     /**
@@ -31,9 +37,6 @@ public class UserMenu extends BasePage {
     public boolean isAvatarVisible() {
         return wait.until(ExpectedConditions.visibilityOf(leftAvatar)).isDisplayed();
     }
-
-//    @FindBy(css = ".user-pic__image")
-//    private WebElement userMenu;
 
     @FindBy(css = ".UserID-Avatar")
     private WebElement leftAvatar;
@@ -92,16 +95,83 @@ public class UserMenu extends BasePage {
                 .getText();
     }
 
-    public void openUserMenu() {
-        new Actions(driver)
-                .moveToElement(leftAvatar)
-                .pause(Duration.ofMillis(500)) // можно убрать
-                .click()
-                .perform();
-
-        new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_30))
-                .until(ExpectedConditions.elementToBeClickable(leftAvatar));
+    private By resolveMenuContainer() {
+        // 1) самый надёжный способ — по aria-controls
+        String id = leftAvatar.getAttribute("aria-controls");
+        if (id != null && !id.isBlank()) {
+            return By.id(id);
+        }
+        // 2) запасные варианты на случай, если атрибута нет
+        return By.cssSelector("[data-testid='menu-popup'], .menu-popup, [role='menu']");
     }
+
+    public void openUserMenu() {
+        // 0) дождались видимости кнопки
+        wait.until(ExpectedConditions.visibilityOf(accountButton));
+
+        // 1) несколько попыток разными способами
+        for (int attempt = 0; attempt < 4 && !isMenuOpen(); attempt++) {
+            try {
+                switch (attempt) {
+                    case 0: // обычный клик
+                        wait.until(ExpectedConditions.elementToBeClickable(accountButton)).click();
+                        break;
+                    case 1: // клик через Actions (эмулирует «мышкой»)
+                        new Actions(driver)
+                                .moveToElement(accountButton)
+                                .pause(Duration.ofMillis(150))
+                                .click()
+                                .perform();
+                        break;
+                    case 2: // форс-клик JS (если что-то перехватывает)
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", accountButton);
+                        break;
+                    case 3: // клавиатура как запасной вариант
+                        accountButton.sendKeys(Keys.ENTER);
+                        break;
+                }
+            } catch (Exception ignore) {
+                // если какой-то способ кинул исключение — просто пробуем следующий
+            }
+            // дать UI дорисоваться
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
+        // 2) Финальное ожидание факта открытия
+        wait.until(d -> isMenuOpen());
+    }
+
+    private boolean isMenuOpen() {
+        try {
+            String expanded = accountButton.getAttribute("aria-expanded");
+            if ("true".equalsIgnoreCase(expanded)) return true;
+        } catch (StaleElementReferenceException ignored) {
+            // если кнопка пересоздалась — позже проверим контейнер
+        }
+        List<WebElement> list = driver.findElements(MENU_CONTAINER);
+        return !list.isEmpty() && list.get(0).isDisplayed();
+    }
+
+    // булева проверка для ассерта
+
+    /**
+     * Меню открыто?
+     */
+    public boolean isUserMenuOpen() {
+        try {
+            if ("true".equalsIgnoreCase(accountButton.getAttribute("aria-expanded"))) return true;
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(MENU_CONTAINER)).isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Открыть меню: клик по кнопке + фоллбэк на JS-клик
+     */
 
     @FindBy(xpath = "//a[@data-testid='mail']//span[text()='Почта']")
     //@FindBy(xpath = "//a[@data-testid='mail']")
@@ -141,7 +211,6 @@ public class UserMenu extends BasePage {
             }
             throw e;
         }
-
         return new MailPage(driver);
     }
 }
