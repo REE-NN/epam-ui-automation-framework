@@ -13,6 +13,7 @@
                 <parameter name="sentLetter_Subject" value="send"/>
             </class>
             <class name="testCases.LogoutTest"/>
+            <class name="testCases.Hooks"/>
         </classes>
     </test>
 </suite>
