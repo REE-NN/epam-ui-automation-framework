@@ -27,7 +27,7 @@ public class UserMenu extends BasePage {
 //    private WebElement userMenu;
 
     @FindBy(css = ".UserID-Avatar")
-    private WebElement userMenu;
+    private WebElement leftAvatar;
 
     @FindBy(css = ".personal-info-login__text_decorated")
     private WebElement emailAddress;
@@ -83,18 +83,18 @@ public class UserMenu extends BasePage {
                 .getText();
     }
 
-    @FindBy(css = ".UserID-Avatar")
-    private WebElement userAvatar;
+//    @FindBy(css = ".UserID-Avatar")
+//    private WebElement userAvatar;
 
     public void openUserMenu() {
         new Actions(driver)
-                .moveToElement(userAvatar)
+                .moveToElement(leftAvatar)
                 .pause(Duration.ofMillis(500)) // можно убрать
                 .click()
                 .perform();
 
         new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS_30))
-                .until(ExpectedConditions.elementToBeClickable(userMenu));
+                .until(ExpectedConditions.elementToBeClickable(leftAvatar));
     }
 
     @FindBy(xpath = "//a[@data-testid='mail']//span[text()='Почта']")
@@ -106,12 +106,12 @@ public class UserMenu extends BasePage {
 
         try {
             new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(ExpectedConditions.elementToBeClickable(userMenu));
+                    .until(ExpectedConditions.elementToBeClickable(leftAvatar));
 
             try {
-                userMenu.click();
+                leftAvatar.click();
             } catch (Exception e) {
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", userMenu);
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", leftAvatar);
             }
 
             new WebDriverWait(driver, Duration.ofSeconds(30))
@@ -143,4 +143,8 @@ public class UserMenu extends BasePage {
         actions.click(webElement).perform();
         return new MailPage(driver);
     }
+
+//    public boolean isAvatarVisible(){
+//        return wait.until(ExpectedConditions.visibilityOf(leftAvatar)).isDisplayed();
+//    }
 }
