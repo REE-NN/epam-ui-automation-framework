@@ -3,8 +3,10 @@ package testCases.security;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -36,31 +38,28 @@ public class LoggingMaskTest {
         // уникальный маркер этой строки, чтобы точно найти её в файле
         String marker = "user=eva#" + System.nanoTime();
 
-        // 1) логируем тестовую строку (маркер "user=eva" пригодится для поиска)
         log.error(marker + " password=Qwerty token=abc123 secret = zzz Authorization: Bearer ABC.DEF==");
 
-        // 2) даём логгеру докатить запись в файл
         Thread.sleep(150);
 
-        // 3) читаем файл и ищем нашу строку по маркеру
-        var file = logFile();
-        var lines = Files.readAllLines(file);
-        String last = lines.get(lines.size() - 1);
+        var lines = Files.readAllLines(logFile(), StandardCharsets.UTF_8);
+        String line = null;
         for (int i = lines.size() - 1; i >= 0; i--) {
             if (lines.get(i).contains(marker)) {
-                last = lines.get(i);
+                line = lines.get(i);
                 break;
             }
         }
+        Assert.assertNotNull(line, "Не нашли свежую строку по маркеру: " + marker);
 
-        org.testng.Assert.assertFalse(last.contains("Qwerty"));
-        org.testng.Assert.assertFalse(last.contains("abc123"));
-        org.testng.Assert.assertFalse(last.contains("zzz"));
-        org.testng.Assert.assertFalse(last.contains("Bearer ABC.DEF=="));
+        Assert.assertFalse(line.contains("Qwerty"));
+        Assert.assertFalse(line.contains("abc123"));
+        Assert.assertFalse(line.contains("zzz"));
+        Assert.assertFalse(line.contains("Bearer ABC.DEF=="));
 
-        org.testng.Assert.assertTrue(last.contains("password=****"));
-        org.testng.Assert.assertTrue(last.contains("token=****"));
-        org.testng.Assert.assertTrue(last.contains("secret = ****"));
-        org.testng.Assert.assertTrue(last.contains("Authorization: Bearer ****"));
+        Assert.assertTrue(line.contains("password=****"));
+        Assert.assertTrue(line.contains("token=****"));
+        Assert.assertTrue(line.contains("secret = ****"));
+        Assert.assertTrue(line.contains("Authorization: Bearer ****"));
     }
 }
