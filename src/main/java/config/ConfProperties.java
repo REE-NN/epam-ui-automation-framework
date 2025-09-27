@@ -3,22 +3,26 @@ package config;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class ConfProperties {
     private static final Properties PROPERTIES = new Properties();
 
     static {
+        loadIfPresent("conf.properties");
+        loadIfPresent("secrets.properties");
+    }
+
+    private static void loadIfPresent(String name) {
         try (InputStream is = Thread.currentThread()
                 .getContextClassLoader()
-                .getResourceAsStream("conf.properties")) {
-
-            if (is == null) {
-                throw new IllegalStateException("conf.properties not found in classpath");
-            }
-            PROPERTIES.load(is);
+                .getResourceAsStream(name)) {
+            if (is == null) return; // нет файла — просто пропускаем
+            PROPERTIES.load(new InputStreamReader(is, StandardCharsets.UTF_8));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load conf.properties", e);
+            throw new RuntimeException("Failed to load " + name, e);
         }
     }
     private ConfProperties() {}

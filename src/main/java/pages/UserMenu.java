@@ -83,15 +83,6 @@ public class UserMenu extends BasePage {
                 .getText();
     }
 
-//    public MailPage openRightMenuItem(WebElement somePage) {
-//        actions
-//                .click(userMenu)
-//                .pause(WAIT_TIMEOUT_SECONDS_90)
-//                .click(somePage)
-//                .build().perform();
-//        return new MailPage(driver);
-//    }
-
     @FindBy(css = ".UserID-Avatar")
     private WebElement userAvatar;
 
@@ -106,91 +97,9 @@ public class UserMenu extends BasePage {
                 .until(ExpectedConditions.elementToBeClickable(userMenu));
     }
 
-//    @FindBy(css = "a[data-statlog='notifications.mail']")
-//    private WebElement mailMenuItem; - не в проекте
-
-//    @FindBy(css = ".MenuItem_mail")
-//    private WebElement mailPage;
-
     @FindBy(xpath = "//a[@data-testid='mail']//span[text()='Почта']")
     //@FindBy(xpath = "//a[@data-testid='mail']")
     private WebElement mailPage;
-
-//    public MailPage openMailFromMenu() {
-//        Logger log = LogManager.getLogger(UserMenu.class);
-//
-//        log.info("⏱ Старт открытия меню пользователя");
-//        long totalStart = System.currentTimeMillis();
-//
-//        // ⏱ Замер времени клика по аватару
-//        try {
-//            long start = System.currentTimeMillis();
-//            log.info("➡ Пытаемся кликнуть по userMenu (аватар)");
-//
-//            try {
-//                new WebDriverWait(driver, Duration.ofSeconds(10))
-//                        .until(ExpectedConditions.elementToBeClickable(userMenu));
-//                userMenu.click();
-//                log.info("✅ Клик по userMenu обычным способом прошёл за " + (System.currentTimeMillis() - start) + " мс");
-//            } catch (Exception e) {
-//                log.warn("⚠ Обычный клик по userMenu не сработал, пробуем через JavaScript");
-//
-//                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", userMenu);
-//                log.info("✅ JS-клик по userMenu прошёл за " + (System.currentTimeMillis() - start) + " мс");
-//            }
-//        } catch (Exception e) {
-//            log.error("❌ Ошибка при попытке открыть меню пользователя", e);
-//            throw e;
-//        }
-//
-//        // ⏱ Ожидаем появление меню
-//        try {
-//            long start = System.currentTimeMillis();
-//            log.info("➡ Ждём появления меню (.menu-popup)");
-//            new WebDriverWait(driver, Duration.ofSeconds(30))
-//                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".menu-popup")));
-//            log.info("✅ Меню появилось за " + (System.currentTimeMillis() - start) + " мс");
-//        } catch (TimeoutException e) {
-//            log.error("❌ Меню пользователя не появилось", e);
-//            throw e;
-//        }
-//
-//        // ⏱ Ожидаем кликабельность кнопки "Почта"
-//        try {
-//            long start = System.currentTimeMillis();
-//            log.info("➡ Ждём кликабельность mailPage");
-//
-//            new WebDriverWait(driver, Duration.ofSeconds(30))
-//                    .until(ExpectedConditions.elementToBeClickable(mailPage));
-//
-//            log.info("✅ mailPage кликабельна (ждали " + (System.currentTimeMillis() - start) + " мс)");
-//        } catch (TimeoutException e) {
-//            log.error("❌ mailPage не стал кликабельным", e);
-//            throw e;
-//        }
-//
-//        // ⏱ Кликаем по "Почта"
-//        try {
-//            long start = System.currentTimeMillis();
-//            log.info("➡ Кликаем по mailPage");
-//
-//            try {
-//                mailPage.click();
-//                log.info("✅ Клик по mailPage прошёл за " + (System.currentTimeMillis() - start) + " мс");
-//            } catch (Exception e) {
-//                log.warn("⚠ Обычный клик по mailPage не сработал, пробуем JS");
-//                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", mailPage);
-//                log.info("✅ JS-клик по mailPage прошёл за " + (System.currentTimeMillis() - start) + " мс");
-//            }
-//
-//        } catch (Exception e) {
-//            log.error("❌ Ошибка при клике по mailPage", e);
-//            throw e;
-//        }
-//
-//        log.info("🏁 Открытие меню и переход заняли всего: " + (System.currentTimeMillis() - totalStart) + " мс");
-//        return new MailPage(driver);
-//    }
 
     public MailPage openMailFromMenu() {
         long totalStart = System.currentTimeMillis();
