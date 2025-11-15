@@ -14,7 +14,7 @@ public class LetterSendTest {
     @BeforeMethod(
             onlyForGroups = {"send letter"})
     void openLetter() throws InterruptedException {
-        userMenu.openLeftMenuItem(userMenu.getDraftFolder());
+        mailPage.openLeftMenuItem(userMenu.getDraftFolder());
         Thread.sleep(THREAD_SLEEP_4);
         mailPage.openLetter(mailPage.getFirstLetter());
     }
@@ -32,7 +32,7 @@ public class LetterSendTest {
             groups = {"check sent letter"},
             dependsOnGroups = {"send letter"})
     void checkSentLetterSubjectTest(String Subject_Body) throws InterruptedException {
-        userMenu.openLeftMenuItem(userMenu.getSentFolder());
+        mailPage.openLeftMenuItem(userMenu.getSentFolder());
 
         String sentLetterSubject = mailPage.getFirstLetterSubject();
         assertEquals(sentLetterSubject, Subject_Body, "The email \"" +

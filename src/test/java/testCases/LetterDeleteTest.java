@@ -19,7 +19,7 @@ public class LetterDeleteTest {
             dependsOnGroups = {"create letter"}
     )
     public void checkDraftSubjectTest(String subjectBody) {
-        userMenu.openLeftMenuItem(userMenu.getDraftFolder());
+        mailPage.openLeftMenuItem(userMenu.getDraftFolder());
         waitForDraftListToUpdate();
 
         String firstDraftSubject = mailPage.getFirstLetterSubject();
@@ -31,10 +31,10 @@ public class LetterDeleteTest {
     @Test(
             groups = {"delete drafts"},
             dependsOnGroups = {"check drafts"})
-    void deleteFirstDraft(String subjectBody) throws InterruptedException {
+    void deleteFirstDraft(String subjectBody) {
         mailPage.dragAndDrop(mailPage.getFirstLetter(), userMenu.getTrashFolder());
 
-        userMenu.openLeftMenuItem(userMenu.getTrashFolder());
+        mailPage.openLeftMenuItem(userMenu.getTrashFolder());
         waitForDraftListToUpdate();
         String firstDeletedLetterSubject = mailPage.getFirstLetterSubject();
         assertEquals(firstDeletedLetterSubject, subjectBody,

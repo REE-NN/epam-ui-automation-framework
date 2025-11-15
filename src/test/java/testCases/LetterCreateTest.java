@@ -21,7 +21,7 @@ public class LetterCreateTest {
             onlyForGroups = {"create letter"})
     void openNewLetter() {
         log.info("Открытие формы нового письма через меню");
-        userMenu.openLeftMenuItem(userMenu.getNewLetterBtn());
+        mailPage.openLeftMenuItem(userMenu.getNewLetterBtn());
 
         boolean isPresent = mailPage.isElementPresent();
         log.info("Форма создания письма отображается: {}", isPresent);
